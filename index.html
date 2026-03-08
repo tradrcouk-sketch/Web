@@ -1,352 +1,725 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="styles.css" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pick the Best Gear in 2 Minutes</title>
-  <meta name="description" content="Take a quick quiz, compare options, and get personalized recommendations (with affiliate links clearly disclosed)." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <title>TRADR — Find the Best Tech</title>
+  <meta name="description" content="TRADR helps you discover fun, useful tech with personality. Curated finds, interactive picks, and affiliate links to Amazon." />
+  <style>
+    :root{
+      --bg:#0b1220;
+      --bg2:#111b2e;
+      --card:#16233b;
+      --card2:#1b2b47;
+      --text:#eef4ff;
+      --muted:#a9b7d4;
+      --line:rgba(255,255,255,.10);
+      --accent:#73f0c1;
+      --accent2:#7aa8ff;
+      --accent3:#ffd166;
+      --shadow:0 18px 60px rgba(0,0,0,.35);
+      --radius:22px;
+      --max:1150px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 10% 0%, rgba(122,168,255,.18), transparent 60%),
+        radial-gradient(700px 420px at 90% 10%, rgba(115,240,193,.14), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      min-height:100vh;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{width:min(var(--max), 92vw);margin:0 auto}
+    .topbar{
+      position:sticky; top:0; z-index:30;
+      backdrop-filter: blur(12px);
+      background:rgba(8,14,24,.72);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar__inner{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px; padding:14px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{
+      width:42px;height:42px;border-radius:14px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent2),var(--accent));
+      color:#08111d;font-weight:900; box-shadow:var(--shadow);
+    }
+    .brand h1{font-size:18px;margin:0;letter-spacing:.02em}
+    .brand p{margin:0;color:var(--muted);font-size:12px}
+
+    .nav{display:flex;gap:16px;flex-wrap:wrap}
+    .nav a{color:var(--muted);font-weight:700;font-size:14px}
+    .nav a:hover{color:var(--text)}
+
+    .btn, button{
+      border:none; font:inherit;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:12px 15px; border-radius:16px; cursor:pointer;
+      transition:transform .08s ease, opacity .15s ease, background .15s ease;
+      font-weight:800;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn--primary{
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#07121f;
+    }
+    .btn--ghost{
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+    .btn--tiny{
+      padding:8px 10px;
+      border-radius:12px;
+      font-size:13px;
+    }
+
+    .hero{
+      padding:44px 0 18px;
+    }
+    .hero__grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .heroCard, .panel, .productCard, .miniCard, .vsCard, .aboutCard, .disclosure, .footerCard{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .heroCard{
+      padding:28px;
+      min-height:420px;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      color:var(--muted);
+      width:max-content; font-weight:700; font-size:13px;
+    }
+    .hero h2{
+      font-size:clamp(38px, 6vw, 72px);
+      line-height:.96;
+      letter-spacing:-.05em;
+      margin:16px 0 14px;
+      max-width:9ch;
+    }
+    .heroLead{
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.6;
+      max-width:58ch;
+    }
+    .heroActions{
+      display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;
+    }
+
+    .panel{
+      padding:18px;
+      display:grid;
+      gap:14px;
+    }
+    .panel h3,.sectionHead h3,.aboutCard h3,.vsCard h3{margin:0;font-size:24px;letter-spacing:-.03em}
+    .muted{color:var(--muted)}
+    .funBox{
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+    }
+    .fortune{
+      font-size:22px; line-height:1.35; font-weight:800; letter-spacing:-.02em;
+      min-height:92px;
+    }
+
+    .section{
+      padding:18px 0;
+    }
+    .sectionHead{
+      display:flex; justify-content:space-between; align-items:end; gap:12px; flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+    .sectionHead p{margin:6px 0 0;color:var(--muted)}
+
+    .filters{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .chip{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:800;
+    }
+    .chip.active{
+      background:linear-gradient(135deg, rgba(115,240,193,.22), rgba(122,168,255,.20));
+      border-color:rgba(115,240,193,.45);
+    }
+
+    .products{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:14px;
+    }
+    .productCard{
+      overflow:hidden;
+      position:relative;
+      transition:transform .12s ease, border-color .12s ease;
+    }
+    .productCard:hover{
+      transform:translateY(-3px);
+      border-color:rgba(255,255,255,.22);
+    }
+    .productTop{
+      aspect-ratio: 4 / 3;
+      display:grid;
+      place-items:center;
+      font-size:70px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.10), transparent 35%),
+        linear-gradient(135deg, rgba(122,168,255,.24), rgba(115,240,193,.10));
+      border-bottom:1px solid var(--line);
+    }
+    .productBody{padding:16px}
+    .tagRow{
+      display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;
+    }
+    .tag{
+      font-size:12px; color:var(--muted); font-weight:800;
+      padding:6px 9px; border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+    }
+    .productCard h4{
+      margin:0 0 8px;
+      font-size:22px;
+      letter-spacing:-.03em;
+      line-height:1.05;
+    }
+    .productDesc{
+      color:var(--muted);
+      line-height:1.6;
+      min-height:70px;
+    }
+    .caption{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.04);
+      border:1px dashed rgba(255,255,255,.14);
+      font-size:13px;
+      color:#d7e6ff;
+    }
+    .productActions{
+      display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+
+    .vsCard,.aboutCard,.miniCard,.footerCard,.disclosure{
+      padding:18px;
+    }
+
+    .versus{
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      gap:12px;
+      align-items:center;
+      margin-top:14px;
+    }
+    .vsItem{
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      text-align:center;
+    }
+    .vsEmoji{font-size:42px;margin-bottom:8px}
+    .vsName{font-size:22px;font-weight:900;letter-spacing:-.03em}
+    .vsBlurb{color:var(--muted);margin-top:6px;line-height:1.5}
+    .vsVotes{margin-top:10px;font-size:13px;color:var(--muted);font-weight:800}
+    .vsMiddle{
+      font-size:22px; font-weight:900; color:var(--accent3);
+      align-self:center;
+    }
+
+    .reactionRow{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;
+    }
+    .reactBtn{
+      flex:1 1 120px;
+      min-width:120px;
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:900;
+    }
+    .reactBtn span{
+      display:block;
+      font-size:28px;
+      margin-bottom:4px;
+    }
+
+    .aboutList{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+    }
+    .aboutItem{
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      color:#dbe8ff;
+      line-height:1.6;
+    }
+
+    .disclosure{
+      margin-top:14px;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    .footer{
+      padding:20px 0 50px;
+    }
+    .footerCard{
+      display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center;
+    }
+
+    @media (max-width: 980px){
+      .hero__grid, .grid2, .products{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 760px){
+      .nav{display:none}
+      .hero__grid, .grid2, .products, .versus{grid-template-columns:1fr}
+      .vsMiddle{text-align:center}
+      .heroCard{min-height:auto}
+      .hero h2{max-width:none}
+    }
+  </style>
 </head>
-
 <body>
-  <a class="skip" href="#main">Skip to content</a>
-
   <header class="topbar">
     <div class="wrap topbar__inner">
       <div class="brand">
-        <div class="brand__logo" aria-hidden="true">◎</div>
-        <div class="brand__text">
-          <div class="brand__name">Smart Picks</div>
-          <div class="brand__tag">Quiz • Compare • Save</div>
+        <div class="logo">T</div>
+        <div>
+          <h1>TRADR</h1>
+          <p>Find the best tech, but make it fun.</p>
         </div>
       </div>
 
       <nav class="nav">
-        <a href="#quiz">Quiz</a>
-        <a href="#compare">Compare</a>
-        <a href="#kit">Kit</a>
-        <a href="#faq">FAQ</a>
+        <a href="#picks">Picks</a>
+        <a href="#versus">This or That</a>
+        <a href="#about">About</a>
       </nav>
 
-      <div class="topbar__actions">
-        <button class="btn btn--ghost" id="btnOpenSaved" type="button">
-          Saved <span class="pill" id="savedCount">0</span>
-        </button>
-        <a class="btn btn--primary" href="#quiz">Get My Picks</a>
-      </div>
-    </div>
-    <div class="reading">
-      <div class="reading__bar" id="readingBar" style="width:0%"></div>
+      <button class="btn btn--ghost btn--tiny" id="surpriseBtn">Surprise me</button>
     </div>
   </header>
 
-  <main id="main">
-    <section class="hero">
-      <div class="wrap hero__grid">
-        <div class="hero__copy">
-          <p class="badge">Fast, interactive recommendations</p>
-          <h1>Keep people engaged by being genuinely useful.</h1>
-          <p class="lead">
-            This page gives visitors a reason to stay: a <strong>2-minute quiz</strong>,
-            a <strong>sortable comparison table</strong>, and a <strong>build-your-kit</strong> planner.
+  <main>
+    <section class="hero wrap">
+      <div class="hero__grid">
+        <div class="heroCard">
+          <div>
+            <div class="eyebrow">⚡ Curated tech • Amazon affiliate links • zero fake hype</div>
+            <h2>Find the Best Tech.</h2>
+            <p class="heroLead">
+              TRADR is for people who want cool, useful tech without the boring, over-salesy nonsense.
+              Just fun picks, good vibes, and easy links out when something actually looks worth it.
+            </p>
+
+            <div class="heroActions">
+              <a href="#picks" class="btn btn--primary">Browse picks</a>
+              <button class="btn btn--ghost" id="fortuneBtn">Give me a tech mood</button>
+            </div>
+          </div>
+
+          <div class="funBox">
+            <div class="muted" style="font-weight:800;margin-bottom:8px;">Today’s TRADR mood</div>
+            <div class="fortune" id="fortuneText">You are spiritually aligned with a tiny gadget that solves one oddly specific problem.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="miniCard">
+            <h3>What TRADR actually is</h3>
+            <p class="muted" style="line-height:1.7;margin:10px 0 0;">
+              Not a fake review empire. Not a “7 figure store” cosplay. Just a fun tech discovery page
+              with personality, curation, and affiliate links when you want to go deeper.
+            </p>
+          </div>
+
+          <div class="miniCard">
+            <h3>Choose your vibe</h3>
+            <div class="filters" id="vibeFilters" style="margin-top:12px;">
+              <button class="chip active" data-vibe="all">Everything</button>
+              <button class="chip" data-vibe="movie-night">Movie night</button>
+              <button class="chip" data-vibe="desk-setup">Desk setup</button>
+              <button class="chip" data-vibe="music">Music</button>
+              <button class="chip" data-vibe="easy-life">Easy life</button>
+            </div>
+          </div>
+
+          <div class="miniCard">
+            <h3>Micro joy corner</h3>
+            <p class="muted" style="margin:10px 0 14px;">Tap the emoji that best describes your relationship with gadgets.</p>
+            <div class="reactionRow" id="reactionRow">
+              <button class="reactBtn" data-reaction="obsessed"><span>🤓</span>Obsessed</button>
+              <button class="reactBtn" data-reaction="curious"><span>😮</span>Curious</button>
+              <button class="reactBtn" data-reaction="chaotic"><span>🫠</span>Chaotic</button>
+              <button class="reactBtn" data-reaction="cozy"><span>😌</span>Cozy</button>
+            </div>
+            <div class="muted" id="reactionResult" style="margin-top:10px;font-weight:800;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="disclosure">
+        <strong>Affiliate disclosure:</strong> TRADR may earn a commission from some links on this page if you choose to buy through them.
+        That does not change the price you pay on Amazon.
+      </div>
+    </section>
+
+    <section class="section wrap" id="picks">
+      <div class="sectionHead">
+        <div>
+          <h3>Current picks</h3>
+          <p>Curated around the same kind of tech already on your page, but with way more life.</p>
+        </div>
+        <button class="btn btn--ghost btn--tiny" id="shuffleCardsBtn">Shuffle energy</button>
+      </div>
+
+      <div class="products" id="products"></div>
+    </section>
+
+    <section class="section wrap" id="versus">
+      <div class="grid2">
+        <div class="vsCard">
+          <h3>This or That</h3>
+          <p class="muted" style="margin:8px 0 0;line-height:1.7;">
+            Because people love choosing between two things, even when they absolutely do not need either.
           </p>
 
-          <div class="hero__cta">
-            <a class="btn btn--primary btn--lg" href="#quiz">Start the Quiz</a>
-            <button class="btn btn--ghost btn--lg" id="btnRandomize" type="button">Surprise Me</button>
+          <div class="versus">
+            <div class="vsItem">
+              <div class="vsEmoji" id="leftEmoji">📺</div>
+              <div class="vsName" id="leftName">Roku</div>
+              <div class="vsBlurb" id="leftBlurb">Minimal effort, maximum couch potential.</div>
+              <button class="btn btn--primary" id="voteLeft" style="margin-top:12px;">Pick this</button>
+              <div class="vsVotes" id="leftVotes">Votes: 0</div>
+            </div>
+
+            <div class="vsMiddle">VS</div>
+
+            <div class="vsItem">
+              <div class="vsEmoji" id="rightEmoji">🔥</div>
+              <div class="vsName" id="rightName">Fire TV</div>
+              <div class="vsBlurb" id="rightBlurb">For when your TV wants main-character energy.</div>
+              <button class="btn btn--primary" id="voteRight" style="margin-top:12px;">Pick this</button>
+              <div class="vsVotes" id="rightVotes">Votes: 0</div>
+            </div>
           </div>
 
-          <div class="disclosure" role="note" aria-label="Affiliate disclosure">
-            <strong>Disclosure:</strong> Some links are affiliate links. If you buy through them, we may earn a commission
-            at no extra cost to you. We only include items we believe are good fits.
-          </div>
-
-          <div class="stats">
-            <div class="stat">
-              <div class="stat__num" id="statTime">2:00</div>
-              <div class="stat__label">Average to finish</div>
-            </div>
-            <div class="stat">
-              <div class="stat__num" id="statSaved">0</div>
-              <div class="stat__label">Items saved</div>
-            </div>
-            <div class="stat">
-              <div class="stat__num" id="statMatches">—</div>
-              <div class="stat__label">Matches found</div>
-            </div>
-          </div>
+          <button class="btn btn--ghost btn--tiny" id="newMatchupBtn" style="margin-top:14px;">New matchup</button>
         </div>
 
-        <div class="hero__panel" aria-label="Personalized picks preview">
-          <div class="card">
-            <div class="card__head">
-              <h2 class="card__title">Your picks will appear here</h2>
-              <p class="card__sub">Answer a few questions, then compare and save.</p>
-            </div>
-            <div class="card__body">
-              <div class="empty" id="picksEmpty">
-                <div class="empty__icon" aria-hidden="true">✨</div>
-                <div class="empty__text">
-                  <strong>No picks yet.</strong><br />
-                  Start the quiz to generate recommendations.
-                </div>
-              </div>
+        <div class="aboutCard" id="about">
+          <h3>About TRADR</h3>
+          <p class="muted" style="margin:10px 0 0;line-height:1.7;">
+            TRADR works best when it feels like a friend showing you cool tech, not a robot screaming “BUY NOW”.
+          </p>
 
-              <div class="picks" id="picksList" hidden></div>
-            </div>
-
-            <div class="card__foot">
-              <a class="btn btn--primary" href="#compare">Jump to Compare</a>
-              <button class="btn btn--ghost" id="btnShare" type="button">Share My Picks</button>
-            </div>
-          </div>
-
-          <div class="mini">
-            <div class="mini__title">Retention without tricks</div>
-            <ul class="mini__list">
-              <li>Progress + micro-wins</li>
-              <li>Personalization + saved state</li>
-              <li>Compare tools people come back to</li>
-            </ul>
+          <div class="aboutList">
+            <div class="aboutItem">🎯 <strong>Curated, not cluttered.</strong> A smaller set of picks feels more confident than a giant wall of random products.</div>
+            <div class="aboutItem">😄 <strong>Interactive, not pushy.</strong> Make people smile, click around, and remember the brand.</div>
+            <div class="aboutItem">🛒 <strong>Affiliate-friendly, not salesy.</strong> Let Amazon do the checkout heavy lifting.</div>
+            <div class="aboutItem">✨ <strong>Personality wins.</strong> Funny captions, surprise buttons, and little choices make the page feel alive.</div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="quiz">
-      <div class="wrap">
-        <div class="section__head">
-          <h2>Quick Quiz</h2>
-          <p>Answer 5 questions. We’ll tailor picks and highlight best matches.</p>
+    <section class="footer wrap">
+      <div class="footerCard">
+        <div>
+          <div style="font-weight:900;font-size:18px;">TRADR</div>
+          <div class="muted" style="margin-top:4px;">Cool tech, good links, less cringe.</div>
         </div>
-
-        <div class="quiz">
-          <div class="quiz__meta">
-            <div class="progress">
-              <div class="progress__bar" id="quizBar" style="width:0%"></div>
-            </div>
-            <div class="quiz__metaRow">
-              <span class="muted" id="quizStepText">Step 1 of 5</span>
-              <button class="link" id="btnResetQuiz" type="button">Reset</button>
-            </div>
-          </div>
-
-          <div class="quiz__body" id="quizBody" aria-live="polite"></div>
-
-          <div class="quiz__actions">
-            <button class="btn btn--ghost" id="btnPrev" type="button" disabled>Back</button>
-            <button class="btn btn--primary" id="btnNext" type="button">Next</button>
-          </div>
-
-          <div class="quiz__result" id="quizResult" hidden>
-            <div class="result__head">
-              <h3>Your personalized results</h3>
-              <p class="muted">Tip: Save a couple options, then use Compare to decide.</p>
-            </div>
-            <div class="result__grid" id="resultGrid"></div>
-            <div class="result__actions">
-              <a class="btn btn--primary" href="#compare">Compare Options</a>
-              <a class="btn btn--ghost" href="#kit">Build My Kit</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="compare">
-      <div class="wrap">
-        <div class="section__head">
-          <h2>Compare (sortable + filterable)</h2>
-          <p>People stick around when they can actually make a decision here.</p>
-        </div>
-
-        <div class="controls">
-          <div class="controls__left">
-            <label class="field">
-              <span>Search</span>
-              <input id="searchInput" type="search" placeholder="e.g., lightweight, budget, pro…" />
-            </label>
-
-            <label class="field">
-              <span>Max price</span>
-              <input id="maxPrice" type="range" min="20" max="500" value="500" />
-              <div class="tiny muted">Up to <span id="maxPriceLabel">£500</span></div>
-            </label>
-
-            <label class="field">
-              <span>Category</span>
-              <select id="categorySelect">
-                <option value="all">All</option>
-              </select>
-            </label>
-          </div>
-
-          <div class="controls__right">
-            <button class="btn btn--ghost" id="btnClearFilters" type="button">Clear</button>
-            <button class="btn btn--primary" id="btnSortScore" type="button">Sort by Match</button>
-          </div>
-        </div>
-
-        <div class="tableWrap" role="region" aria-label="Comparison table">
-          <table class="table" id="compareTable">
-            <thead>
-              <tr>
-                <th>
-                  <button class="thbtn" data-sort="name" type="button">Name</button>
-                </th>
-                <th>
-                  <button class="thbtn" data-sort="category" type="button">Category</button>
-                </th>
-                <th class="num">
-                  <button class="thbtn" data-sort="price" type="button">Price</button>
-                </th>
-                <th>
-                  <button class="thbtn" data-sort="rating" type="button">Rating</button>
-                </th>
-                <th>Why it’s good</th>
-                <th class="actionsCol">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="compareTbody"></tbody>
-          </table>
-        </div>
-
-        <div class="note">
-          <strong>Affiliate link tip:</strong> Put your affiliate URLs into <code>PRODUCTS</code> in <code>app.js</code>.
-          Always keep the disclosure visible.
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="kit">
-      <div class="wrap">
-        <div class="section__head">
-          <h2>Build Your Kit</h2>
-          <p>A “planner” makes people come back. Saves to your browser automatically.</p>
-        </div>
-
-        <div class="kit">
-          <div class="kit__left">
-            <div class="card">
-              <div class="card__head">
-                <h3 class="card__title">Your kit</h3>
-                <p class="card__sub">Drag from the right or click “Add to kit”.</p>
-              </div>
-              <div class="card__body">
-                <div class="kitList" id="kitList" aria-label="Kit items"></div>
-                <div class="kitEmpty" id="kitEmpty">
-                  Nothing yet. Add a few items from the recommendations or table.
-                </div>
-              </div>
-              <div class="card__foot kit__foot">
-                <div>
-                  <div class="tiny muted">Estimated total</div>
-                  <div class="total" id="kitTotal">£0</div>
-                </div>
-                <button class="btn btn--ghost" id="btnClearKit" type="button">Clear kit</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="kit__right">
-            <div class="card">
-              <div class="card__head">
-                <h3 class="card__title">Suggested add-ons</h3>
-                <p class="card__sub">Based on your quiz profile.</p>
-              </div>
-              <div class="card__body">
-                <div class="addonGrid" id="addonGrid"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="section" id="faq">
-      <div class="wrap">
-        <div class="section__head">
-          <h2>FAQ</h2>
-          <p>Accordion FAQs keep attention while addressing objections.</p>
-        </div>
-
-        <div class="accordion" id="accordion">
-          <details>
-            <summary>Are these affiliate links?</summary>
-            <div class="acc__body">Yes, some are. We disclose this at the top and near buttons. You’re never charged extra.</div>
-          </details>
-          <details>
-            <summary>How do you choose recommendations?</summary>
-            <div class="acc__body">The quiz creates a simple preference profile (budget vs premium, lightweight vs power, beginner vs pro) and scores products by fit.</div>
-          </details>
-          <details>
-            <summary>Can I change the niche?</summary>
-            <div class="acc__body">Yep. Replace the sample products in <code>app.js</code> with your niche (cameras, travel gear, software, etc.). Keep the same interaction flow.</div>
-          </details>
-        </div>
-
-        <footer class="footer">
-          <div class="wrap footer__inner">
-            <div class="muted">© <span id="year"></span> Smart Picks. Built for usefulness first.</div>
-            <div class="footer__links">
-              <button class="link" id="btnOpenDisclosure" type="button">Disclosure</button>
-              <button class="link" id="btnExportData" type="button">Export my picks</button>
-            </div>
-          </div>
-        </footer>
+        <button class="btn btn--ghost btn--tiny" id="backTopBtn">Back to top</button>
       </div>
     </section>
   </main>
 
-  <!-- Saved drawer -->
-  <div class="drawer" id="drawer" aria-hidden="true">
-    <div class="drawer__backdrop" id="drawerBackdrop"></div>
-    <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="Saved items">
-      <div class="drawer__head">
-        <h3>Saved items</h3>
-        <button class="iconbtn" id="drawerClose" type="button" aria-label="Close">✕</button>
-      </div>
-      <div class="drawer__body">
-        <div id="savedList"></div>
-        <div class="muted tiny" style="margin-top:12px">
-          Saved locally in your browser (localStorage).
-        </div>
-      </div>
-      <div class="drawer__foot">
-        <button class="btn btn--ghost" id="btnClearSaved" type="button">Clear saved</button>
-        <a class="btn btn--primary" href="#compare" id="btnGoCompare">Go to compare</a>
-      </div>
-    </div>
-  </div>
+  <script>
+    const products = [
+      {
+        name: "Roku Streaming Stick 4K",
+        emoji: "📺",
+        vibe: ["movie-night","easy-life"],
+        blurb: "The tiny stick for people who want their TV to just work and then leave them alone.",
+        caption: "For the person whose dream hobby is horizontal.",
+        url: "https://amzn.to/3ZIlIg9"
+      },
+      {
+        name: "Amazon Fire TV 40” 2-Series",
+        emoji: "🔥",
+        vibe: ["movie-night","easy-life"],
+        blurb: "A full TV pick for people ready to commit to sofa excellence.",
+        caption: "Basically a rectangle full of potential and snacks.",
+        url: "https://amzn.to/3ZG3k7F"
+      },
+      {
+        name: "Sony WH-CH520",
+        emoji: "🎧",
+        vibe: ["music","easy-life"],
+        blurb: "Wireless headphones for zoning in, zoning out, and pretending you did not hear that.",
+        caption: "Ideal for trains, walks, study sessions, and dramatic staring out windows.",
+        url: "https://amzn.to/3OfjrXi"
+      },
+      {
+        name: "Logitech K380",
+        emoji: "⌨️",
+        vibe: ["desk-setup","easy-life"],
+        blurb: "A compact keyboard for the person who wants their desk to look suspiciously put together.",
+        caption: "Tiny keyboard. Huge ‘I have my life together’ energy.",
+        url: "https://amzn.to/3NPh2CC"
+      }
+    ];
 
-  <!-- Disclosure modal -->
-  <div class="modal" id="modal" aria-hidden="true">
-    <div class="modal__backdrop" id="modalBackdrop"></div>
-    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="Disclosure">
-      <div class="modal__head">
-        <h3>Affiliate disclosure</h3>
-        <button class="iconbtn" id="modalClose" type="button" aria-label="Close">✕</button>
-      </div>
-      <div class="modal__body">
-        <p>
-          Some links on this page are affiliate links. If you purchase through these links, we may earn a commission.
-          This helps support the site. We aim to recommend options that match your preferences and budget.
-        </p>
-        <p class="muted tiny">
-          (If you need FTC/ASA compliant wording for your region, keep it short, clear, and visible near links.)
-        </p>
-      </div>
-      <div class="modal__foot">
-        <button class="btn btn--primary" id="modalOk" type="button">Got it</button>
-      </div>
-    </div>
-  </div>
+    const fortunes = [
+      "You are spiritually aligned with a tiny gadget that solves one oddly specific problem.",
+      "Your vibe today is: one useful tech item and absolutely zero buyer’s remorse.",
+      "A random accessory may soon improve your life by 14%.",
+      "You do not need more gadgets. However. Counterpoint: look at them.",
+      "Today feels like a ‘convince yourself it’s practical’ kind of day.",
+      "Your future self thanks you for choosing the one that is actually convenient."
+    ];
 
-  <script src="app.js"></script>
+    const matchupBlurbs = [
+      "Minimal effort, maximum couch potential.",
+      "For when your setup deserves a tiny upgrade.",
+      "Quietly useful in the most dangerous way: you’ll use it every day.",
+      "One of those products that makes you say ‘okay that’s actually handy.’",
+      "Looks innocent. Secretly changes the vibe.",
+      "A respectable amount of tech joy per click."
+    ];
+
+    const productsEl = document.getElementById("products");
+    const fortuneText = document.getElementById("fortuneText");
+    const fortuneBtn = document.getElementById("fortuneBtn");
+    const surpriseBtn = document.getElementById("surpriseBtn");
+    const shuffleCardsBtn = document.getElementById("shuffleCardsBtn");
+    const backTopBtn = document.getElementById("backTopBtn");
+    const reactionResult = document.getElementById("reactionResult");
+    const chipButtons = [...document.querySelectorAll(".chip")];
+
+    const leftName = document.getElementById("leftName");
+    const rightName = document.getElementById("rightName");
+    const leftEmoji = document.getElementById("leftEmoji");
+    const rightEmoji = document.getElementById("rightEmoji");
+    const leftBlurb = document.getElementById("leftBlurb");
+    const rightBlurb = document.getElementById("rightBlurb");
+    const leftVotes = document.getElementById("leftVotes");
+    const rightVotes = document.getElementById("rightVotes");
+
+    const voteLeft = document.getElementById("voteLeft");
+    const voteRight = document.getElementById("voteRight");
+    const newMatchupBtn = document.getElementById("newMatchupBtn");
+
+    let currentVibe = "all";
+    let currentMatchup = [products[0], products[1]];
+
+    function shuffle(arr){
+      return [...arr].sort(() => Math.random() - 0.5);
+    }
+
+    function randomItem(arr){
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function renderProducts(){
+      const filtered = currentVibe === "all"
+        ? products
+        : products.filter(p => p.vibe.includes(currentVibe));
+
+      productsEl.innerHTML = filtered.map((p, i) => `
+        <article class="productCard" style="animation:fadeUp .35s ease ${i * 0.04}s both;">
+          <div class="productTop">${p.emoji}</div>
+          <div class="productBody">
+            <div class="tagRow">
+              ${p.vibe.map(v => `<span class="tag">${prettyVibe(v)}</span>`).join("")}
+            </div>
+            <h4>${p.name}</h4>
+            <div class="productDesc">${p.blurb}</div>
+            <div class="caption">${p.caption}</div>
+            <div class="productActions">
+              <a class="btn btn--primary btn--tiny" target="_blank" rel="noopener noreferrer nofollow" href="${p.url}">
+                See on Amazon
+              </a>
+              <button class="btn btn--ghost btn--tiny" onclick="copyLink('${p.url}')">Copy link</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+
+      if (!filtered.length){
+        productsEl.innerHTML = `
+          <div class="aboutCard">
+            <h3>No picks for that vibe yet</h3>
+            <p class="muted" style="margin-top:10px;">Try another filter, or add more TRADR finds to the product list.</p>
+          </div>
+        `;
+      }
+    }
+
+    function prettyVibe(v){
+      return {
+        "movie-night":"Movie night",
+        "desk-setup":"Desk setup",
+        "music":"Music",
+        "easy-life":"Easy life"
+      }[v] || v;
+    }
+
+    function setFortune(){
+      fortuneText.textContent = randomItem(fortunes);
+    }
+
+    function copyLink(link){
+      navigator.clipboard.writeText(link).then(() => {
+        reactionResult.textContent = "Copied a link. Extremely efficient behavior.";
+      }).catch(() => {
+        reactionResult.textContent = "Could not copy the link, but spiritually it was copied.";
+      });
+    }
+    window.copyLink = copyLink;
+
+    function setVibe(vibe){
+      currentVibe = vibe;
+      chipButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.vibe === vibe);
+      });
+      renderProducts();
+    }
+
+    chipButtons.forEach(btn => {
+      btn.addEventListener("click", () => setVibe(btn.dataset.vibe));
+    });
+
+    function newMatchup(){
+      const shuffled = shuffle(products);
+      currentMatchup = [shuffled[0], shuffled[1]];
+      leftName.textContent = currentMatchup[0].name;
+      rightName.textContent = currentMatchup[1].name;
+      leftEmoji.textContent = currentMatchup[0].emoji;
+      rightEmoji.textContent = currentMatchup[1].emoji;
+      leftBlurb.textContent = randomItem(matchupBlurbs);
+      rightBlurb.textContent = randomItem(matchupBlurbs);
+
+      const votes = JSON.parse(localStorage.getItem("tradr_votes") || "{}");
+      leftVotes.textContent = "Votes: " + (votes[currentMatchup[0].name] || 0);
+      rightVotes.textContent = "Votes: " + (votes[currentMatchup[1].name] || 0);
+    }
+
+    function vote(side){
+      const chosen = side === "left" ? currentMatchup[0] : currentMatchup[1];
+      const votes = JSON.parse(localStorage.getItem("tradr_votes") || "{}");
+      votes[chosen.name] = (votes[chosen.name] || 0) + 1;
+      localStorage.setItem("tradr_votes", JSON.stringify(votes));
+      newMatchup();
+      reactionResult.textContent = "You voted for " + chosen.name + ". Strong choice.";
+    }
+
+    voteLeft.addEventListener("click", () => vote("left"));
+    voteRight.addEventListener("click", () => vote("right"));
+    newMatchupBtn.addEventListener("click", newMatchup);
+
+    document.querySelectorAll(".reactBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const mood = btn.dataset.reaction;
+        const messages = {
+          obsessed: "Same. This is a safe space for gadget enthusiasm.",
+          curious: "Excellent. Curiosity is how desk setups happen.",
+          chaotic: "That is the correct energy for buying tech online.",
+          cozy: "You are one wireless accessory away from peak comfort."
+        };
+        localStorage.setItem("tradr_mood", mood);
+        reactionResult.textContent = messages[mood];
+      });
+    });
+
+    surpriseBtn.addEventListener("click", () => {
+      const p = randomItem(products);
+      window.open(p.url, "_blank", "noopener,noreferrer");
+    });
+
+    shuffleCardsBtn.addEventListener("click", () => {
+      products.push(products.shift());
+      renderProducts();
+      reactionResult.textContent = "Shuffled the energy. Entirely scientific.";
+    });
+
+    fortuneBtn.addEventListener("click", setFortune);
+    backTopBtn.addEventListener("click", () => window.scrollTo({top:0, behavior:"smooth"}));
+
+    const rememberedMood = localStorage.getItem("tradr_mood");
+    if (rememberedMood){
+      const msg = {
+        obsessed: "Welcome back, tech goblin.",
+        curious: "Welcome back, tasteful browser of gadgets.",
+        chaotic: "Welcome back, agent of useful chaos.",
+        cozy: "Welcome back, curator of comfy convenience."
+      };
+      reactionResult.textContent = msg[rememberedMood] || "";
+    }
+
+    renderProducts();
+    setFortune();
+    newMatchup();
+
+    const style = document.createElement("style");
+    style.textContent = `
+      @keyframes fadeUp{
+        from{opacity:0; transform:translateY(8px)}
+        to{opacity:1; transform:translateY(0)}
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
 </body>
 </html>
